@@ -27,11 +27,11 @@ exports.register = async (req, res, next) => {
 
 
 exports.login=async function(req,res){
-    console.log("arshhhhhhh",req.body.email);
+    console.log("request email",req.body.email);
     
     try{
         let user = await User.findOne({email: req.body.email});
-        console.log("zzzzzzz",user);
+        console.log("user found",user);
     
 
         if (!user || user.password != req.body.password){
@@ -40,7 +40,7 @@ exports.login=async function(req,res){
             });
         }
 
-        return res.json(200, {
+        return res.status(200).json( {
             message: 'Sign in successful, here is your token, please keep it safe!',
             data:  {
                 token: jwt.sign(user.toJSON(), 'Bhumi', {expiresIn:  '100000000'})
@@ -49,7 +49,7 @@ exports.login=async function(req,res){
 
     }catch(err){
         console.log('********', err);
-        return res.json(500, {
+        return res.status(500).json( {
             message: "Internal Server Error"
         });
     }
