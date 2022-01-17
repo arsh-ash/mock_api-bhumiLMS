@@ -5,6 +5,8 @@ const Category = require("../models/courseCategory");
 //@desc    Create Category
 //@route   POST /course/deletecategory/61e519b1707c9a23a40cc811
 //@access  Private
+
+// Create category
 exports.createCategory = async (req, res, next) => {
   console.log("Api called");
   try {
@@ -25,6 +27,7 @@ exports.createCategory = async (req, res, next) => {
   }
 };
 
+// Delete category
 exports.deleteCategory = async (req, res, next) => {
   console.log("Api called");
   try {
