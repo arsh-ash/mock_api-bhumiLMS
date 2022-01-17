@@ -2,7 +2,7 @@ const User = require("../models/users");
 const jwt=require("jsonwebtoken");
 
 //@desc    create User
-//@route   POST /api/v1/auth/users
+//@route   POST /users/register
 //@access  Public
 
 exports.register = async (req, res, next) => {
@@ -25,6 +25,11 @@ exports.register = async (req, res, next) => {
     }
 }
 
+
+
+//@desc    Login User
+//@route   POST /users/login
+//@access  Public
 
 exports.login=async function(req,res){
     console.log("request email",req.body.email);
