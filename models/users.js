@@ -24,10 +24,13 @@ const UserSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: [true, "Please add a password"],
-        minlength: 6,
+        required: true,
+        // minlength: 6,
         // select: false, // it will not show the password when we fetch the user details
     },
+    resetPasswordToken:{
+        type:String
+    }
 });
 
 module.exports = mongoose.model("User", UserSchema);
