@@ -136,12 +136,12 @@ exports.changePassword=async function(req,res){
      user.password=req.body.newPassword;
      user.save(function(err){
        if(err){
-         console.log("cannot save user", err);
+         console.log("Cannot update pasword", err);
        }
-     });
+     },{ validateBeforeSave: false });
     console.log("newly saved user",user);
     return res.status(200).json({
-      message:"xxxxxxxxxxxxxxxx"
+      message:"Password change successfully"
     })
   }
   else{
