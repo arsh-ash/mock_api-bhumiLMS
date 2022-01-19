@@ -13,6 +13,7 @@
   "author": "Arsh and Zuhaib",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.1",
     "crypto": "^1.0.1",
     "express": "^4.17.2",

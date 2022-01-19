@@ -1,7 +1,8 @@
 const User = require("../models/users");
 const jwt = require("jsonwebtoken");
-const forgetPassword_Mailer=require("../mailers/forgetpassword_mailer");
-const crypto=require("crypto");
+const forgetPassword_Mailer = require("../mailers/forgetpassword_mailer");
+const crypto = require("crypto");
+const { findByIdAndUpdate } = require("../models/users");
 
 //@desc    Get Current User
 //@route   GET /user/getCurrentuser
@@ -81,73 +82,137 @@ exports.updateUser = async function (req, res) {
   }
 };
 
-exports.forgetPassword=async function(req,res){
-  let user=await User.findOne({email:req.body.email})
-  if (user){
-    let buffer= await crypto.randomBytes(32)
-    let token=buffer.toString("hex");
-    user.resetPasswordToken=token
+exports.forgetPassword = async function (req, res) {
+  let user = await User.findOne({ email: req.body.email });
+  if (user) {
+    let buffer = await crypto.randomBytes(32);
+    let token = buffer.toString("hex");
+    user.resetPasswordToken = token;
     // user.expireTime=Date.now+3600000
     await user.save();
     forgetPassword_Mailer.forgetPassword(user);
-
-
-  }else{
+  } else {
     return res.status(200).json({
-      message:"email address is not registered"
-    })
+      message: "email address is not registered",
+    });
   }
 
   return res.status(200).json({
-    message:'request is sussessful'
-  })
+    message: "request is sussessful",
+  });
+};
 
-}
-
-exports.resetPassword= async function(req,res){
-
-  let id=req.params.id
-  console.log("hexa token",id);
-  if(req.body.password==req.body.confirmPassword){
-    let user= await User.findOne({resetPasswordToken:id})
-    user.password=req.body.password;
-    user.resetPasswordToken=undefined;
+exports.resetPassword = async function (req, res) {
+  let id = req.params.id;
+  console.log("hexa token", id);
+  if (req.body.password == req.body.confirmPassword) {
+    let user = await User.findOne({ resetPasswordToken: id });
+    user.password = req.body.password;
+    user.resetPasswordToken = undefined;
     user.save();
     return res.status(200).json({
-      message:"Password changed successfully"
-    })
-  }
-  else{
+      message: "Password changed successfully",
+    });
+  } else {
     return res.status(200).json({
-      message:"password did not match"
-    })
+      message: "password did not match",
+    });
   }
+};
 
-
-
-}
-exports.changePassword=async function(req,res){
-  console.log("hiiiiiiiiiiiiiii")
-  let user= await User.findOne({email:req.user.email});
-  console.log(user);
-  if(user.password==req.body.currentPassword){
-    console.log("old passwod",user.password)
-    console.log("current password",req.body.currentPassword);
-     user.password=req.body.newPassword;
-     user.save(function(err){
-       if(err){
-         console.log("Cannot update pasword", err);
-       }
-     },{ validateBeforeSave: false });
-    console.log("newly saved user",user);
-    return res.status(200).json({
-      message:"Password change successfully"
-    })
+exports.changePassword = async function (req, res) {
+  console.log("hiiiiiiiiiiiiiii", req.user);
+  let user = await User.findById(req.user.id);
+  if (user.password == req.body.currentPassword) {
+    if (user.password != req.body.newPassword) {
+      user.password = req.body.newPassword;
+      user.save();
+      return res.status(200).json({
+        message: "password changed",
+      });
+    } else {
+      return res.status(201).json({
+        message: "password cannot be same as previous password",
+      });
+    }
+  } else {
+    return res.status(202).json({
+      message: "current password didn't match",
+    });
   }
-  else{
-    return res.status(200).json({
-      message:"password did not match"
-    })
-  }
+};
 
-}
+//@desc    Get all students
+//@route   GET /user/getAllStudents
+//@access  Public (for now)
+
+exports.getAllStudents = async (req, res) => {
+  try {
+    let students = await User.find({ role: "student" });
+    if (students.length) {
+      return res.status(200).json({
+        success: true,
+        message: "Students list fetched successfully",
+        total: students.length,
+        data: students,
+      });
+    } else
+      return res.status(202).json({
+        success: true,
+        message: "No students enrolled yet",
+        data: {},
+      });
+  } catch (err) {
+    console.log("Request failed", err);
+  }
+};
+
+//@desc    Get all admins
+//@route   GET /user/getAllStudents
+//@access  Public (for now)
+
+exports.getAllAdmins = async (req, res) => {
+  try {
+    let admins = await User.find({ role: "admin" });
+    if (admins.length) {
+      return res.status(200).json({
+        success: true,
+        message: "Admins list fetched successfully",
+        total: admins.length,
+        data: admins,
+      });
+    } else
+      return res.status(202).json({
+        success: true,
+        message: "No admins found",
+        data: {},
+      });
+  } catch (err) {
+    console.log("Request failed", err);
+  }
+};
+
+//@desc    Get all intructors
+//@route   GET /user/getAllInstructors
+//@access  Public (for now)
+
+exports.getAllInstructors = async (req, res) => {
+  try {
+    let instructors = await User.find({ role: "instructor" });
+    if (instructors.length) {
+      return res.status(200).json({
+        success: true,
+        message: "Instructors list fetched successfully",
+        total: instructors.length,
+        data: instructors,
+      });
+    } else
+      return res.status(202).json({
+        success: true,
+        message: "No instructors found",
+        data: {},
+      });
+  } catch (err) {
+    console.log("Request failed", err);
+  }
+};
