@@ -2,6 +2,7 @@ const User = require("../models/users");
 const jwt = require("jsonwebtoken");
 const forgetPassword_Mailer=require("../mailers/forgetpassword_mailer");
 const crypto=require("crypto");
+const { findByIdAndUpdate } = require("../models/users");
 
 //@desc    Get Current User
 //@route   GET /user/getCurrentuser
@@ -127,27 +128,30 @@ exports.resetPassword= async function(req,res){
 
 }
 exports.changePassword=async function(req,res){
-  console.log("hiiiiiiiiiiiiiii")
-  let user= await User.findOne({email:req.user.email});
-  console.log(user);
+  console.log("hiiiiiiiiiiiiiii",req.user);
+  let user= await User.findById(req.user.id);
   if(user.password==req.body.currentPassword){
-    console.log("old passwod",user.password)
-    console.log("current password",req.body.currentPassword);
-     user.password=req.body.newPassword;
-     user.save(function(err){
-       if(err){
-         console.log("cannot save user", err);
-       }
-     });
-    console.log("newly saved user",user);
-    return res.status(200).json({
-      message:"xxxxxxxxxxxxxxxx"
-    })
+    if(user.password!=req.body.newPassword){
+      user.password=req.body.newPassword
+      user.save();
+      return res.status(200).json({
+        message:"password changed"
+      })
+  
+    }
+    else{
+      return res.status(201).json({
+        message:"password cannot be same as previous password"
+      })
+    }
+
   }
   else{
-    return res.status(200).json({
-      message:"password did not match"
+    return res.status(202).json({
+      message:"current password didn't match"
     })
   }
+   
+  
+  }
 
-}

@@ -24,7 +24,6 @@ const UserSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true,
         // minlength: 6,
         // select: false, // it will not show the password when we fetch the user details
     },
