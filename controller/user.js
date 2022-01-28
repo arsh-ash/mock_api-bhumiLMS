@@ -10,7 +10,7 @@ const { findByIdAndUpdate } = require("../models/users");
 
 exports.getCurrentuser = async function (req, res) {
   try {
-    let user = await User.findById(req.user.id);
+    const user = await User.findById(req.user.id);
     console.log("user found again", user);
 
     if (!user) {
@@ -37,7 +37,7 @@ exports.getCurrentuser = async function (req, res) {
 
 exports.getIndividualUser = async function (req, res) {
   try {
-    let user = await User.findById(req.params.id);
+    const user = await User.findById(req.params.id);
     console.log("User found", user);
 
     if (!user) {
@@ -64,7 +64,7 @@ exports.getIndividualUser = async function (req, res) {
 
 exports.updateUser = async function (req, res) {
   try {
-    let user = await User.findByIdAndUpdate(req.user.id, req.body, {
+    const user = await User.findByIdAndUpdate(req.user.id, req.body, {
       new: true, // so that we get updated user in response
       runValidators: true,
     });
@@ -83,30 +83,30 @@ exports.updateUser = async function (req, res) {
 };
 
 exports.forgetPassword = async function (req, res) {
-  let user = await User.findOne({ email: req.body.email });
+  const user = await User.findOne({ email: req.body.email });
   if (user) {
-    let buffer = await crypto.randomBytes(32);
-    let token = buffer.toString("hex");
+    const buffer =  crypto.randomBytes(32);
+    const token = buffer.toString("hex");
     user.resetPasswordToken = token;
     // user.expireTime=Date.now+3600000
     await user.save();
     forgetPassword_Mailer.forgetPassword(user);
   } else {
-    return res.status(200).json({
-      message: "email address is not registered",
+    return res.status(202).json({
+      message: "Email address is not registered",
     });
   }
 
   return res.status(200).json({
-    message: "request is sussessful",
+    message: "Request is sussessful",
   });
 };
 
 exports.resetPassword = async function (req, res) {
-  let id = req.params.id;
+  const id = req.params.id;
   console.log("hexa token", id);
   if (req.body.password == req.body.confirmPassword) {
-    let user = await User.findOne({ resetPasswordToken: id });
+    const user = await User.findOne({ resetPasswordToken: id });
     user.password = req.body.password;
     user.resetPasswordToken = undefined;
     user.save();
@@ -122,7 +122,7 @@ exports.resetPassword = async function (req, res) {
 
 exports.changePassword = async function (req, res) {
   console.log("hiiiiiiiiiiiiiii", req.user);
-  let user = await User.findById(req.user.id);
+  const user = await User.findById(req.user.id);
   if (user.password == req.body.currentPassword) {
     if (user.password != req.body.newPassword) {
       user.password = req.body.newPassword;
@@ -148,7 +148,7 @@ exports.changePassword = async function (req, res) {
 
 exports.getAllStudents = async (req, res) => {
   try {
-    let students = await User.find({ role: "student" });
+    const students = await User.find({ role: "student" });
     if (students.length) {
       return res.status(200).json({
         success: true,
@@ -173,7 +173,7 @@ exports.getAllStudents = async (req, res) => {
 
 exports.getAllAdmins = async (req, res) => {
   try {
-    let admins = await User.find({ role: "admin" });
+    const admins = await User.find({ role: "admin" });
     if (admins.length) {
       return res.status(200).json({
         success: true,
@@ -198,7 +198,7 @@ exports.getAllAdmins = async (req, res) => {
 
 exports.getAllInstructors = async (req, res) => {
   try {
-    let instructors = await User.find({ role: "instructor" });
+    const instructors = await User.find({ role: "instructor" });
     if (instructors.length) {
       return res.status(200).json({
         success: true,
