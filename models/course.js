@@ -1,6 +1,9 @@
 
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
+const path = require("path");
+const multer = require("multer");
+const IMAGES_PATH = path.join("/uploads/course/images");
 
 const courseSchema = new Schema(
     {
@@ -70,5 +73,22 @@ const courseSchema = new Schema(
     }
 );
 
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      console.log("File fetched", file);
+      cb(null, path.join(__dirname, "..", IMAGES_PATH));
+    },
+    filename: function (req, file, cb) {
+      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+      console.log("file/file", file);
+      cb(null, "avatar" + "-" + uniqueSuffix);
+    },
+  });
+  
+  UserSchema.statics.uploadedAvatar = multer({ storage: storage }).single(
+    "avatar"
+  );
+  UserSchema.statics.avatarPath = IMAGES_PATH;
 
 module.exports = mongoose.model("Courses", courseSchema);

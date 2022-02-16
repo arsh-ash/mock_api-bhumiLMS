@@ -1,31 +1,31 @@
 const express = require("express");
 const {
-  createCategory,
-  deleteCategory,
-  editCategory,
+  createCourse,
+  deleteCourse,
+  editCourse,
   getAllCategories,
-} = require("../controller/catagory");
+} = require("../controller/course");
 const passport = require("passport");
 const router = express.Router();
-// router.post("/createCategory", createCategory);
+// router.post("/createCourse", createCourse);
 
 router.get("/getAllCategories", getAllCategories);
 
 router.post(
-  "/createCategory",
+  "/createCourse",
   passport.authenticate("jwt", { session: false }),
-  createCategory
+  createCourse
 );
 
 router.delete(
-  "/deleteCategory/:id",
+  "/deleteCourse/:id",
   passport.authenticate("jwt", { session: false }),
-  deleteCategory
+  deleteCourse
 );
 router.put(
-  "/editCategory/:id",
+  "/editCourse/:id",
   passport.authenticate("jwt", { session: false }),
-  editCategory
+  editCourse
 );
 
 module.exports = router;
