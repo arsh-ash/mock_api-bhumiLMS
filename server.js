@@ -1,4 +1,5 @@
 const express=require("express");
+const Cors =require("cors")
 
 const app=express();
 // 
@@ -10,6 +11,7 @@ const passportJWT=require("./config/passport-jwt-strategy");
 
 
 app.use(express.json());
+app.use(cors())
 // app.use(express.urlencoded());
 app.use(passport.initialize());
 ; // it will allow us to use req.body
