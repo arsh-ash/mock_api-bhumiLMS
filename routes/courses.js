@@ -3,14 +3,10 @@ const {
   createCourse,
   deleteCourse,
   editCourse,
-  getAllCategories,
+  getAllCourse,
 } = require("../controller/course");
 const passport = require("passport");
 const router = express.Router();
-// router.post("/createCourse", createCourse);
-
-router.get("/getAllCategories", getAllCategories);
-
 router.post(
   "/createCourse",
   passport.authenticate("jwt", { session: false }),
@@ -26,6 +22,11 @@ router.put(
   "/editCourse/:id",
   passport.authenticate("jwt", { session: false }),
   editCourse
+);
+router.get(
+  "/getAllCourses",
+  passport.authenticate("jwt", { session: false }),
+  getAllCourse
 );
 
 module.exports = router;

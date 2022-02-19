@@ -25,8 +25,6 @@ const UserSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    // minlength: 6,
-    // select: false, // it will not show the password when we fetch the user details
   },
   resetPasswordToken: {
     type: String,
@@ -35,15 +33,14 @@ const UserSchema = new mongoose.Schema({
 
 // Encrypt password using bcrypt
 UserSchema.pre("save", async function (next) {
-//   if (!this.isModified("password")) {
-//     next();
-//   } // we`ve done it to prevent it from running when we run forgot password API
-  const salt = await bcrypt.genSalt(10); // 10 is basically number of rounds for security as you guessed more the better but heavier on the system and 10 is recommended
-  this.password = await bcrypt.hash(this.password, salt);
+    if(this.password){
+      const salt = await bcrypt.genSalt(10); 
+      this.password = await bcrypt.hash(this.password, salt);
+    }
+  
 });
-// Match user entered password to the hashed password
 UserSchema.methods.matchPassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password); // this is the method which is gonna be called on actual user so it has access to the password
+  return await bcrypt.compare(enteredPassword, this.password); 
 };
 
 module.exports = mongoose.model("User", UserSchema);

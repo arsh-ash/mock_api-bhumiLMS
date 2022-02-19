@@ -82,13 +82,14 @@ const storage = multer.diskStorage({
     filename: function (req, file, cb) {
       const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
       console.log("file/file", file);
-      cb(null, "avatar" + "-" + uniqueSuffix);
+      cb(null, file.fieldname + "-" + uniqueSuffix);
     },
   });
+  // bahout kam ki bat form field name filename and single k andr vala name same hona chahiye
   
-  UserSchema.statics.uploadedAvatar = multer({ storage: storage }).single(
-    "avatar"
+  courseSchema.statics.uploadedAvatar = multer({ storage: storage }).single(
+    "thumbnail"
   );
-  UserSchema.statics.avatarPath = IMAGES_PATH;
+  courseSchema.statics.avatarPath = IMAGES_PATH;
 
 module.exports = mongoose.model("Courses", courseSchema);
