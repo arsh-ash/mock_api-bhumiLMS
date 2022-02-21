@@ -1,9 +1,7 @@
 const User = require("../models/users");
 const jwt = require("jsonwebtoken");
 
-//@desc    create User
-//@route   POST /auth/register
-//@access  Public
+
 
 exports.register = async (req, res, next) => {
   //   Create User
@@ -17,70 +15,46 @@ exports.register = async (req, res, next) => {
       data: user,
     });
   } catch (err) {
-    // console.log('required error v2',err.errors.email.ValidatorError)
     res.status(404).json({
       message: `${err}`,
     });
   }
 };
 
-//@desc    Login User
-//@route   POST /auth/login
-//@access  Public
+
 
 exports.login = async function (req, res) {
-
+  console.log("hhhiiii in login");
   try {
     let user = await User.findOne({ email: req.body.email });
     console.log("user found", user);
-
-    if (!user || user.password != req.body.password) {
-      return res.json(422, {
-        message: "Invalid username or password",
+    const password = req.body.password;
+    // Check if password matches
+    const isMatch = await user.matchPassword(password);
+    if (!isMatch) {
+      console.log('Didnt match')
+      // return next(new ErrorResponse("Password is invalid ", 401));
+      return res.status(400).json({
+        message: "Invalid password",
+      });
+    } else if (!user) {
+      console.log('No user')
+      return res.status(400).json({
+        message: "User not found",
       });
     }
 
     return res.status(200).json({
-      message: "Sign in successful, here is your token, please keep it safe!",
+      message: "Sign in successful, here is your token",
       data: {
         token: jwt.sign(user.toJSON(), "Bhumi", { expiresIn: "100000000" }),
       },
     });
   } catch (err) {
+    console.log('server Error',err)
     return res.status(500).json({
-      message: "Internal Server Error",
+      message: err,
     });
   }
 };
 
-
-
-//@desc    Forgot Password
-//@route   POST /auth/forgotPassword
-//@access  Public
-
-// exports.forgotPassword = async function (req, res) {
-//   console.log("request email", req.body.email);
-
-//   try {
-//     let user = await User.findOne({ email: req.body.email });
-//     console.log("user found", user);
-
-//     if (!user) {
-//       return res.json(422, {
-//         message: "Invalid username",
-//       });
-//     }
-
-//     // Get reset token
-//     const resetToken = user.getResetPasswordToken();
-//     return res.status(200).json({
-//       message: "",
-//       data: {},
-//     });
-//   } catch (err) {
-//     return res.status(500).json({
-//       message: "Internal Server Error",
-//     });
-//   }
-// };
