@@ -59,9 +59,9 @@ exports.deleteLecture = async (req, res, next) => {
 
       ///// after delete this data you can delete course also
 
-      await Lecture.findByIdAndDelete(req.params.id);
+      await Lecture.findByIdAndDelete(req.params.lectureId);
       await Sections.findByIdAndUpdate(req.params.sectionId, {
-        $pull: { lecture: req.params.id },
+        $pull: { lectures: req.params.lectureId },
       });
       res.status(200).json({
         success: true,

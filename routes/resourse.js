@@ -1,34 +1,34 @@
 const express=require("express");
 const router=express.Router();
 const passport=require("passport");
-const { createLecture,
-       editLecture,
-       getAllLecture,
-       deleteLecture
+const { createResourse,
+       editResourse,
+       getAllResourse,
+       deleteResourse
 
-}=require("../controller/course/lecture")
+}=require("../controller/course/resourses")
 
 
 router.post("/create/:courseId/:sectionId",
 passport.authenticate("jwt", { session: false }),
-createLecture
+createResourse
 )
 
-router.put("/edit/:lectureId",
+router.put("/edit/:resourseId",
 passport.authenticate("jwt", { session: false }),
-editLecture
+editResourse
 
 )
-router.delete("/delete/:lectureId/:sectionId",
+router.get("/getAllResourse",
 passport.authenticate("jwt", { session: false }),
-deleteLecture
-
+getAllResourse
 )
-router.get("/getAllLecture",
+
+router.delete("/delete/:resourseId/:sectionId",
 passport.authenticate("jwt", { session: false }),
-getAllLecture
-)
+deleteResourse
 
+)
 
 
 module.exports=router
