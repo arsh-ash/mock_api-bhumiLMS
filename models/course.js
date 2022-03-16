@@ -32,7 +32,7 @@ const courseSchema = new Schema(
         sections: [
             {
                 type: Schema.Types.ObjectId,
-                ref: "sections",
+                ref: "Sections",
             },
         ],
         prerequisites: {
@@ -80,7 +80,7 @@ const storage = multer.diskStorage({
       cb(null, path.join(__dirname, "..", IMAGES_PATH));
     },
     filename: function (req, file, cb) {
-      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9) + ".jpg";
       console.log("file/file", file);
       cb(null, file.fieldname + "-" + uniqueSuffix);
     },

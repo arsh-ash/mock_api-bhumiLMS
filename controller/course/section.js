@@ -111,3 +111,35 @@ exports.getAllSection = async (req, res, next) => {
     console.log("Api Failed", err);
   }
 };
+
+exports.sectionsOfCourse=async function(req,res){
+   console.log("req params",req.params.courseId);
+  let data= await Course.findById(req.params.courseId)
+  .populate({
+    path:"sections",
+    populate:{
+      path:"lectures",
+      select:"title"
+    },
+    populate:{
+      path:"resourses",
+      select:"title resourseFile"
+
+    }
+
+  })
+  // path:"sections",
+  //     populate:{
+  //       path:"lectures",
+  //       select:"title video"
+  //     }
+  
+  console.log("here are the sections of course",data);
+  return res.status(200).json({
+    message:"sections of this courses are fatched",
+    data:data,
+  })
+  
+
+}
+

@@ -36,14 +36,14 @@ const storage = multer.diskStorage({
     cb(null, path.join(__dirname, "..", VIDEOS_PATH));
   },
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9) + ".mp4";
     console.log("file/file", file);
-    cb(null, "avatar" + "-" + uniqueSuffix);
+    cb(null, "thumbnail" + "-" + uniqueSuffix);
   },
 });
 
 lectureSchema.statics.uploadedAvatar = multer({ storage: storage }).single(
-  "avatar"
+  "thumbnail"
 );
 lectureSchema.statics.avatarPath = VIDEOS_PATH;
 

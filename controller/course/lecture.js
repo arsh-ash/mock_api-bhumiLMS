@@ -36,7 +36,7 @@ exports.createLecture = async (req, res, next) => {
         );
         res.status(200).json({
           success: true,
-          message: "Course created successfully",
+          message: "lecture created successfully",
           data: lecture,
         });
       }
@@ -81,8 +81,10 @@ exports.deleteLecture = async (req, res, next) => {
 // Edit course
 exports.editLecture = async (req, res, next) => {
   console.log("Api called");
-  // console.log("Api called edit course", req.params.id);
+  
+  console.log("Api called edit lecture", req.params.lectureId);
   let lecture = await Lectures.findById(req.params.lectureId);
+  console.log("lecture=",lecture);
   try {
     if (req.user.role == "admin") {
       // console.log(req.user);
@@ -226,3 +228,16 @@ exports.getAllLecture = async function (req, res) {
     data: lecture,
   });
 };
+
+exports.lecturesOfSection=async function(req,res){
+  console.log("params",req.params);
+  let data= await Sections.findById(req.params.sectionId)
+  .populate({
+    path:"lectures",
+  })
+  return res.status(200).json({
+    message:"all lectures are fetched",
+    data:data,
+  })
+
+}

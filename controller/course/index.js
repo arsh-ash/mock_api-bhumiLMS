@@ -72,8 +72,9 @@ exports.editCourse = async (req, res, next) => {
           console.log("multerError", err);
         }
         if (req.file) {
+          console.log("file hai");
           if (course.thumbnail) {
-            fs.unlinkSync(path.join(__dirname, "..", course.thumbnail));
+            // fs.unlinkSync(path.join(__dirname, "..", course.thumbnail));
           }
           course.thumbnail = Course.avatarPath + "/" + req.file.filename;
           // }
@@ -110,11 +111,17 @@ exports.editCourse = async (req, res, next) => {
 
 // List Course
 exports.getAllCourse = async (req, res, next) => {
-  // console.log("Api called");
+  console.log("Api called");
 
   try {
-    const course = await Course.find({});
-    // console.log(course);
+    const course = await Course.find({}).populate("sections").populate({
+      path:"sections",
+      populate:{
+        path:"lectures",
+        select:"title video"
+      }
+    });
+    console.log(course);
     if (course.length == 0) {
       return res.status(201).json({
         success: false,

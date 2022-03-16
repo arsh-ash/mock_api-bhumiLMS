@@ -92,19 +92,19 @@ exports.editResourse = async (req, res, next) => {
         }
         if (req.file) {
           let data = req.file.mimetype;
-          let result = data.substring(0, 5);
+          let result = data.substring( 12,15);
           console.log("type", result);
-          if (result == "image") {
+          if (result == "pdf") {
             console.log("inside multer image");
-            if (resourse.image) {
+            if (resourse.resourseFile) {
               console.log("resourse",resourse);
               console.log("dir",__dirname);
 
-              fs.unlinkSync(path.join(__dirname, "../..", resourse.image));
+              fs.unlinkSync(path.join(__dirname, "../..", resourse.resourseFile));
             }
-            resourse.image = Resourses.avatarPath + "/" + req.file.filename;
+            resourse.resourseFile = Resourses.avatarPath + "/" + req.file.filename;
 
-            console.log("avatar", resourse.image);
+            console.log("avatar", resourse.resourseFile);
             resourse.save();
             console.log("resoursenew",resourse)
 

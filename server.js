@@ -16,6 +16,7 @@ app.use(cors())
 app.use(passport.initialize());
 ; // it will allow us to use req.body
 
+app.use("/uploads",express.static(__dirname+"/uploads"));
 
 app.use("/",require("./routes"));
 app.listen(port,function(err){
