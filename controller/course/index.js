@@ -130,3 +130,25 @@ exports.getAllCourse = async (req, res, next) => {
     console.log("Api Failed", err);
   }
 };
+
+exports.getCourses = async (req, res, next) => {
+  console.log("Api called edit course", req.params.courseId);
+
+  try {
+    const course = await Course.find({courseCode:req.params.courseId});
+    console.log(course);
+    if (!course) {
+      return res.status(201).json({
+        success: false,
+        message: "No Course found",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      message: "Following Course found in the database",
+      data: course,
+    });
+  } catch (err) {
+    console.log("Api Failed", err);
+  }
+};
