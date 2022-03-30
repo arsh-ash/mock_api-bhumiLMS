@@ -226,3 +226,17 @@ exports.getAllLecture = async function (req, res) {
     data: lecture,
   });
 };
+
+module.exports.lecturesOfCourse=async function(req,res){
+  console.log("params",req.params.sectionId);
+  let alllectutes= await Lectures.find({
+   sectionId:req.params.sectionId
+ })
+
+  return res.status(200).json({
+    message:"section fetched successfully",
+    data:alllectutes
+  })
+
+
+}

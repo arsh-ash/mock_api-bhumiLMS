@@ -32,7 +32,7 @@ const courseSchema = new Schema(
         sections: [
             {
                 type: Schema.Types.ObjectId,
-                ref: "sections",
+                ref: "Sections",
             },
         ],
         prerequisites: {
@@ -46,6 +46,7 @@ const courseSchema = new Schema(
         },
         category: {
             type: String,
+            required:true
         },
         welcomeMessage: {
             type: String

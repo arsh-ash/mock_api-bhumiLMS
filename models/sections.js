@@ -15,17 +15,15 @@ const sectionSchema = new Schema({
         type: String,
         required: true
     },
+    labs:[{
+     type:Schema.Types.ObjectId,
+     ref:"Labs"
+    }],
     lectures: [
         {
             type: Schema.Types.ObjectId,
             ref: "Lectures"
         },
-    ],
-    resourses: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: "Resourses"
-        }
     ],
    
 });

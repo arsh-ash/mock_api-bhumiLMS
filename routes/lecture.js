@@ -4,7 +4,8 @@ const passport=require("passport");
 const { createLecture,
        editLecture,
        getAllLecture,
-       deleteLecture
+       deleteLecture,
+       lecturesOfCourse
 
 }=require("../controller/course/lecture")
 
@@ -27,6 +28,10 @@ deleteLecture
 router.get("/getAllLecture",
 passport.authenticate("jwt", { session: false }),
 getAllLecture
+)
+router.get("/allLecturesOfsection/:sectionId",
+passport.authenticate("jwt", { session: false }),
+lecturesOfCourse
 )
 
 

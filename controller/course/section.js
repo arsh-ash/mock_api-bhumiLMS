@@ -111,3 +111,22 @@ exports.getAllSection = async (req, res, next) => {
     console.log("Api Failed", err);
   }
 };
+
+module.exports.sectionsOfCourse=async function(req,res){
+  console.log("req.params.courseId",req.params.courseId)
+ let module= await  Course.findById(req.params.courseId).populate("sections");
+ console.log("module",module);
+//   let allsections= await Section.find({
+//    courseId:req.params.courseId
+//  })
+// //  console.log("All sections",allsections);
+
+  return res.status(200).json({
+    message:"section fetched successfully",
+    module
+  })
+
+
+}
+
+

@@ -21,7 +21,12 @@ const lectureSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Courses",
       required: true
-    }
+    },
+    resourses:[{
+      type: Schema.Types.ObjectId,
+      ref:"Resourses"
+
+    }]
   },
   {
     timestamps: {

@@ -9,10 +9,11 @@ const { createResourse,
 }=require("../controller/course/resourses")
 
 
-router.post("/create/:courseId/:sectionId",
+router.post("/create/:courseId/:lectureId",
 passport.authenticate("jwt", { session: false }),
 createResourse
 )
+
 
 router.put("/edit/:resourseId",
 passport.authenticate("jwt", { session: false }),

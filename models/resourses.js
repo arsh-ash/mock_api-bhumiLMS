@@ -10,9 +10,9 @@ const resourseSchema = new Schema(
     number: { type: Number },
     description: { type: String, required: true },
     resourseFile: { type: String },
-    sectionId: {
+    lectureId: {
       type: Schema.Types.ObjectId,
-      ref: "Sections",
+      ref: "Lectures",
       required: true
     },
     courseId: {
@@ -34,14 +34,14 @@ const storage = multer.diskStorage({
     cb(null, path.join(__dirname, "..", RESOURSE_PATH));
   },
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9)+".pdf";
     console.log("file/file", file);
-    cb(null, "avatar" + "-" + uniqueSuffix);
+    cb(null, "resource" + "-" + uniqueSuffix);
   },
 });
 
 resourseSchema.statics.uploadedAvatar = multer({ storage: storage }).single(
-  "avatar"
+  "resource"
 );
 resourseSchema.statics.avatarPath = RESOURSE_PATH;
 
