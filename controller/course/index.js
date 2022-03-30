@@ -84,24 +84,23 @@ exports.editCourse = async (req, res, next) => {
           return res.status(200).json({
             message: "photo updated successfully",
           });
-        } 
-          // async await chlega nahi or updated user k liye async await or return true chahiye
-          Course.findByIdAndUpdate(
-            req.params.id,
-            req.body,
-            function (err, course) {
-              if (err) {
-                console.log(err);
-              }
-              console.log("again find", course);
-              return res.status(200).json({
-                success: "true",
-                message: "till now also working fine",
-                data: course,
-              });
+        }
+        // async await chlega nahi or updated user k liye async await or return true chahiye
+        Course.findByIdAndUpdate(
+          req.params.id,
+          req.body,
+          function (err, course) {
+            if (err) {
+              console.log(err);
             }
-          );
-        
+            console.log("again find", course);
+            return res.status(200).json({
+              success: "true",
+              message: "till now also working fine",
+              data: course,
+            });
+          }
+        );
       });
     }
   } catch (error) {
@@ -114,13 +113,15 @@ exports.getAllCourse = async (req, res, next) => {
   console.log("Api called");
 
   try {
-    const course = await Course.find({}).populate("sections").populate({
-      path:"sections",
-      populate:{
-        path:"lectures",
-        select:"title video"
-      }
-    });
+    const course = await Course.find({})
+      .populate("sections")
+      .populate({
+        path: "sections",
+        populate: {
+          path: "lectures",
+          select: "title video",
+        },
+      });
     console.log(course);
     if (course.length == 0) {
       return res.status(201).json({
@@ -142,7 +143,7 @@ exports.getCourses = async (req, res, next) => {
   console.log("Api called edit course", req.params.courseId);
 
   try {
-    const course = await Course.find({courseCode:req.params.courseId});
+    const course = await Course.find({ courseCode: req.params.courseId });
     console.log(course);
     if (!course) {
       return res.status(201).json({

@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const path=require("path");
-const multer=require("multer");
+const path = require("path");
+const multer = require("multer");
 const VIDEOS_PATH = path.join("/uploads/lectures/videos");
 
 const lectureSchema = new Schema(
   {
-    title: { type: String },
+    title: { type: String, required: true },
     number: { type: Number },
     description: { type: String, required: true },
     image: { type: String },
@@ -15,13 +15,13 @@ const lectureSchema = new Schema(
     sectionId: {
       type: Schema.Types.ObjectId,
       ref: "Sections",
-      required: true
+      required: true,
     },
     courseId: {
       type: Schema.Types.ObjectId,
       ref: "Courses",
-      required: true
-    }
+      required: true,
+    },
   },
   {
     timestamps: {
@@ -36,7 +36,8 @@ const storage = multer.diskStorage({
     cb(null, path.join(__dirname, "..", VIDEOS_PATH));
   },
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9) + ".mp4";
+    const uniqueSuffix =
+      Date.now() + "-" + Math.round(Math.random() * 1e9) + ".mp4";
     console.log("file/file", file);
     cb(null, "thumbnail" + "-" + uniqueSuffix);
   },

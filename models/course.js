@@ -46,6 +46,7 @@ const courseSchema = new Schema(
         },
         category: {
             type: String,
+            
         },
         welcomeMessage: {
             type: String
