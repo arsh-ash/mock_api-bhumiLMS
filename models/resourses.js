@@ -6,9 +6,12 @@ const RESOURSE_PATH = path.join("/uploads/lectures/resourses");
 
 const resourseSchema = new Schema(
   {
-    title: { type: String },
-    number: { type: Number },
-    description: { type: String, required: true },
+    title: {
+       type: String ,
+       required:true
+      },
+    // number: { type: Number },
+    // description: { type: String, required: true },
     resourseFile: { type: String },
     lectureId: {
       type: Schema.Types.ObjectId,
@@ -32,10 +35,11 @@ const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     console.log("File fetched", file);
     cb(null, path.join(__dirname, "..", RESOURSE_PATH));
+    
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9)+".pdf";
-    console.log("file/file", file);
+    console.log("file/file", file); 
     cb(null, "resource" + "-" + uniqueSuffix);
   },
 });

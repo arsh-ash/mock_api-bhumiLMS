@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
+const { Schema } = mongoose;
 const UserSchema = new mongoose.Schema({
   firstName: {
     type: String,
@@ -23,6 +24,12 @@ const UserSchema = new mongoose.Schema({
     enum: ["admin", "instructor", "student"],
     default: "student",
   },
+  request:[
+    {
+      type: Schema.Types.ObjectId,
+      ref:"Request"
+    }
+],
   password: {
     type: String,
   },

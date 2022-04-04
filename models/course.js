@@ -1,4 +1,3 @@
-
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const path = require("path");
@@ -77,7 +76,7 @@ const courseSchema = new Schema(
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      console.log("File fetched", file);
+      console.log("File fetched", file); 
       cb(null, path.join(__dirname, "..", IMAGES_PATH));
     },
     filename: function (req, file, cb) {
