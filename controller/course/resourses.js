@@ -105,7 +105,6 @@ exports.editResourse = async (req, res, next) => {
 
 
           // console.log("req.file",req.file);
-          console.log("edited resourse",resource);
           return res.status(200).json({
             message:"now you are comming with file and resource updated successfully",
             data:resource

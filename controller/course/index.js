@@ -7,13 +7,19 @@ const { findByIdAndUpdate } = require("../../models/course");
 
 exports.createCourse = async (req, res, next) => {
   console.log("Api called");
-  const courseObject = {
-    ...req.body,
-    courseCode: req.body.courseName + " 501",
-  };
+  if (!req.body.title) {
+    res.status(404).json({
+      success: false,
+      message: "course title is missing",
+    });
+  }
+  // const courseObject = {
+  //   ...req.body,
+  //   courseCode: req.body.title + "501",
+  // };
   try {
     if (req.user.role == "admin") {
-      const course = await Course.create(courseObject);
+      const course = await Course.create(req.body);
       res.status(200).json({
         success: true,
         message: "Course created successfully",

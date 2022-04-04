@@ -1,26 +1,20 @@
-const express=require("express");
-const router=express.Router();
-const passport=require("passport");
+const express = require("express");
+const router = express.Router();
+const passport = require("passport");
 const {
-    createSection,
-    sectionsOfCourse
-}=require("../controller/course/section");
+  createSection,
+  sectionsOfCourse,
+} = require("../controller/course/section");
 
-
-router.post("/create/:courseId",
-passport.authenticate("jwt", { session: false }),
-createSection);
-router.get("/allSectionsOfCourse/:courseId",
-passport.authenticate("jwt", { session: false }),
-sectionsOfCourse
-
+router.post(
+  "/create/:courseId",
+  passport.authenticate("jwt", { session: false }),
+  createSection
+);
+router.get(
+  "/allSectionsOfCourse/:courseId",
+  passport.authenticate("jwt", { session: false }),
+  sectionsOfCourse
 );
 
-router.get("/sectionOfCourse/:courseId",
-passport.authenticate("jwt", { session: false }),
-sectionsOfCourse
-
-);
-
-
-module.exports=router
+module.exports = router;

@@ -6,6 +6,7 @@ const user=require('./user')
 const course=require("./courses")
 const section=require("./section");
 const lecture=require("./lecture");
+const request=require("./request");
 const conversationRoute=require("./conversation");
 const messageRoute=require("./messeges")
 const resourse=require("./resourse")
@@ -19,6 +20,7 @@ router.use("/course",course);
 router.use("/section",section);
 router.use("/lecture",lecture);
 router.use("/resourse",resourse);
+router.use("/request",request);
 router.use("/api/conversations", conversationRoute);
 router.use("/api/messages", messageRoute);
 
