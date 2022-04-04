@@ -22,6 +22,12 @@ const lectureSchema = new Schema(
       ref: "Courses",
       required: true,
     },
+    resource: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Resource",
+      },
+    ],
   },
   {
     timestamps: {
@@ -39,12 +45,12 @@ const storage = multer.diskStorage({
     const uniqueSuffix =
       Date.now() + "-" + Math.round(Math.random() * 1e9) + ".mp4";
     console.log("file/file", file);
-    cb(null, "thumbnail" + "-" + uniqueSuffix);
+    cb(null, "video" + "-" + uniqueSuffix);
   },
 });
 
 lectureSchema.statics.uploadedAvatar = multer({ storage: storage }).single(
-  "thumbnail"
+  "video"
 );
 lectureSchema.statics.avatarPath = VIDEOS_PATH;
 

@@ -10,13 +10,21 @@ const courseSchema = new Schema(
         thumbnail: {
             type: String
         },
-        title: {
+        courseName: {
+            type: String,
+            required: true,
+        },
+        majorCategory:{
+            type: String,
+            required: true,
+        },
+        subCategory:{
             type: String,
             required: true,
         },
         description: {
             type: String,
-            default: "Become an expert today.",
+            required: true,
         },
         courseCode: {
             type: String,
@@ -43,10 +51,6 @@ const courseSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: "Users",
            
-        },
-        category: {
-            type: String,
-            
         },
         welcomeMessage: {
             type: String

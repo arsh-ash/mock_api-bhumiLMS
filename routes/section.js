@@ -10,6 +10,11 @@ const {
 router.post("/create/:courseId",
 passport.authenticate("jwt", { session: false }),
 createSection);
+router.get("/allSectionsOfCourse/:courseId",
+passport.authenticate("jwt", { session: false }),
+sectionsOfCourse
+
+);
 
 router.get("/sectionOfCourse/:courseId",
 passport.authenticate("jwt", { session: false }),

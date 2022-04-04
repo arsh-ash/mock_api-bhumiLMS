@@ -7,25 +7,20 @@ const sectionSchema = new Schema({
         ref: "Courses",
         required: true
     },
-    number: {
-        type: Number,
-        required: true
-    },
+    
     title: {
         type: String,
         required: true
     },
+    labs:[{
+     type:Schema.Types.ObjectId,
+     ref:"Labs"
+    }],
     lectures: [
         {
             type: Schema.Types.ObjectId,
             ref: "Lectures"
         },
-    ],
-    resourses: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: "Resourses"
-        }
     ],
    
 });

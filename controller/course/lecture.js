@@ -81,10 +81,10 @@ exports.deleteLecture = async (req, res, next) => {
 // Edit course
 exports.editLecture = async (req, res, next) => {
   console.log("Api called");
-  
+
   console.log("Api called edit lecture", req.params.lectureId);
   let lecture = await Lectures.findById(req.params.lectureId);
-  console.log("lecture=",lecture);
+  console.log("lecture=", lecture);
   try {
     if (req.user.role == "admin") {
       // console.log(req.user);
@@ -99,8 +99,8 @@ exports.editLecture = async (req, res, next) => {
           if (result == "image") {
             console.log("inside multer image");
             if (lecture.image) {
-              console.log("lecture",lecture);
-              console.log("dir",__dirname);
+              console.log("lecture", lecture);
+              console.log("dir", __dirname);
 
               fs.unlinkSync(path.join(__dirname, "../..", lecture.image));
             }
@@ -108,8 +108,7 @@ exports.editLecture = async (req, res, next) => {
 
             console.log("avatar", lecture.image);
             lecture.save();
-            console.log("lecturenew",lecture)
-
+            console.log("lecturenew", lecture);
 
             return res.status(200).json({
               message: "photo updated successfully",
@@ -140,7 +139,6 @@ exports.editLecture = async (req, res, next) => {
         // });
       });
       console.log("arsh");
-      
     }
   } catch (error) {
     return console.log(error);
@@ -213,7 +211,7 @@ exports.getSectionLecture = async (req, res, next) => {
     section = await section.populate("lectures").execPopulate();
     res.status(200).json({
       success: true,
-      message: "Following Course found in the database",
+      message: "Lecture fetched successfully",
       data: section,
     });
   } catch (err) {
@@ -229,15 +227,15 @@ exports.getAllLecture = async function (req, res) {
   });
 };
 
-exports.lecturesOfSection=async function(req,res){
-  console.log("params",req.params);
-  let data= await Sections.findById(req.params.sectionId)
-  .populate({
-    path:"lectures",
-  })
-  return res.status(200).json({
-    message:"all lectures are fetched",
-    data:data,
-  })
+module.exports.lecturesOfCourse = async function (req, res) {
+  console.log("params", req.params);
+  let alllectures = await Lectures.find({
+    sectionId: req.params.sectionId,
+  }).populate("resource");
+  console.log('All lectures',alllectures)
 
-}
+  return res.status(200).json({
+    message: "section fetched successfully",
+    data: alllectures,
+  });
+};

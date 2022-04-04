@@ -54,7 +54,7 @@ exports.login = async function (req, res) {
 
     return res.status(200).json({
       message: "Sign in successful, here is your token",
-      success: true,
+      success:true,
       data: {
         token: jwt.sign(user.toJSON(), "Bhumi", { expiresIn: "100000000" }),
       },

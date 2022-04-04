@@ -7,15 +7,9 @@ const { findByIdAndUpdate } = require("../../models/course");
 
 exports.createCourse = async (req, res, next) => {
   console.log("Api called");
-  if (!req.body.title) {
-    res.status(404).json({
-      success: false,
-      message: "course title is missing",
-    });
-  }
   const courseObject = {
     ...req.body,
-    courseCode: req.body.title + "501",
+    courseCode: req.body.courseName + " 501",
   };
   try {
     if (req.user.role == "admin") {
@@ -139,12 +133,12 @@ exports.getAllCourse = async (req, res, next) => {
   }
 };
 
-exports.getCourses = async (req, res, next) => {
+exports.getCourse = async (req, res, next) => {
   console.log("Api called edit course", req.params.courseId);
 
   try {
-    const course = await Course.find({ courseCode: req.params.courseId });
-    console.log(course);
+    const course = await Course.findById( req.params.courseId ).populate('sections');
+    console.log('course found',course);
     if (!course) {
       return res.status(201).json({
         success: false,

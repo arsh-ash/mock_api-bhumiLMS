@@ -1,42 +1,46 @@
 const Sections = require("../../models/sections");
 const Resourses = require("../../models/resourses");
 const Course = require("../../models/course");
+const Lecture = require("../../models/lectures")
+
 const fs = require("fs");
 const path = require("path");
 
 exports.createResourse = async (req, res, next) => {
-  console.log("Api called arsh");
-  if (
-    !req.body.title &&
-    !req.params.courseId &&
-    !req.params.sectionId &&
-    !req.body.description
-  ) {
-    res.status(404).json({
-      success: false,
-      message: "Lecture title or courseId or sectionId is missing",
-    });
-  }
+ 
+  // if (
+    
+  //   !req.params.courseId &&
+  //   // !req.params.sectionId &&
+  //   !req.params.lectureId,
+    
+  // ) {
+  //   res.status(404).json({
+  //     success: false,
+  //     message: "Lecture ti tle or courseId or sectionId is missing",
+  //   });
+  // }
 
   try {
     if (req.user.role == "admin") {
-      let section = Sections.findById(req.params.sectionId);
+      let lecture = Lecture.findById(req.params.lectureId);
       let course = Course.findById(req.params.courseId);
-      if (section && course) {
+      if (lecture && course) {
         const resourseObject = {
           ...req.body,
           courseId: req.params.courseId,
-          sectionId: req.params.sectionId,
+          lectureId: req.params.lectureId,
         };
         const resourse = await Resourses.create(resourseObject);
-        await Sections.findByIdAndUpdate(
-          req.params.sectionId,
-          { $push: { resourses: resourse } },
+        console.log("Created resourse",resourse);
+        await Lecture.findByIdAndUpdate(
+          req.params.lectureId,
+          { $push: { resource: resourse } },
           { new: true }
         );
         res.status(200).json({
           success: true,
-          message: "Course created successfully",
+          message: "resource created successfully",
           data: resourse,
         });
       }
@@ -82,59 +86,116 @@ exports.deleteResourse = async (req, res, next) => {
 exports.editResourse = async (req, res, next) => {
   console.log("Api called");
   // console.log("Api called edit course", req.params.id);
-  let resourse = await Resourses.findById(req.params.resourseId);
+  let resource = await Resourses.findById(req.params.resourseId);
+  // console.log("RESOURCE",resourse);
   try {
     if (req.user.role == "admin") {
-      // console.log(req.user);
-      Resourses.uploadedAvatar(req, res, function (err) {
-        if (err) {
-          console.log("multerError", err);
+    
+      Resourses.uploadedAvatar(req,res,function(err){
+        if(err){
+          console.log("error in multer",err)
         }
-        if (req.file) {
-          let data = req.file.mimetype;
-          let result = data.substring( 12,15);
-          console.log("type", result);
-          if (result == "pdf") {
-            console.log("inside multer image");
-            if (resourse.resourseFile) {
-              console.log("resourse",resourse);
-              console.log("dir",__dirname);
-
-              fs.unlinkSync(path.join(__dirname, "../..", resourse.resourseFile));
-            }
-            resourse.resourseFile = Resourses.avatarPath + "/" + req.file.filename;
-
-            console.log("avatar", resourse.resourseFile);
-            resourse.save();
-            console.log("resoursenew",resourse)
+        if(req.file){
+          if(resource.resourseFile){
+            fs.unlinkSync(path.join(__dirname, "../..", resource.resourseFile));
+           }
+           resource.resourseFile = Resourses.avatarPath + "/" + req.file.filename;
+           resource.save();
 
 
-            return res.status(200).json({
-              message: "photo updated successfully",
-            });
-          } else if (result == "video") {
-            console.log("iside multer video");
-            if (resourse.video) {
-              fs.unlinkSync(path.join(__dirname, "../..", resourse.video));
-            }
-            resourse.video = Resourses.avatarPath + "/" + req.file.filename;
 
-            console.log("avatar", resourse.video);
-            resourse.save();
+          // console.log("req.file",req.file);
+          console.log("edited resourse",resource);
+          return res.status(200).json({
+            message:"now you are comming with file and resource updated successfully",
+            data:resource
+          })
 
-            return res.status(200).json({
-              message: "video updated successfully",
-            });
-          }
         }
-       
-      });
-      
+        else{
+          Resourses.findByIdAndUpdate(req.params.resourseId,req.body,function(err,resource){
+            if(err){
+              console.log("error in edting resourse",err);
+            }
+            return res.status(200).json({
+            message:"there is no file but other things changed",
+            data:resource
+
+          })
+
+
+          })
+          
+          //  let resource=  Resourses.findByIdAndUpdate(req.params.resourseId,req.body,{new:true})
+          // return res.status(200).json({
+          //   message:"there is no file but other things changed",
+          //   data:resource
+
+          // })
+        }
+        
+
+
+      })
+     
+      // // console.log(req.user);
+      // Resourses.uploadedAvatar(req, res, function (err) {
+      //   if (err) {
+      //     console.log("multerError", err);
+      //   }
+      //   if (req.file) {
+      //     let data = req.file.mimetype;
+      //     let result = data.substring(0, 5);
+      //     console.log("type", result);
+      //     if (result == "image") {
+      //       console.log("inside multer image");
+      //       if (resourse.image) {
+      //         console.log("resourse", resourse);
+      //         console.log("dir", __dirname);
+
+      //         fs.unlinkSync(path.join(__dirname, "../..", resourse.image));
+      //       }
+      //       resourse.image = Resourses.avatarPath + "/" + req.file.filename;
+
+      //       console.log("avatar", resourse.image);
+      //       resourse.save();
+      //       console.log("resoursenew", resourse)
+
+
+      //       return res.status(200).json({
+      //         message: "photo updated successfully",
+      //       });
+      //     } else if (result == "video") {
+      //       console.log("iside multer video");
+      //       if (resourse.video) {
+      //         fs.unlinkSync(path.join(__dirname, "../..", resourse.video));
+      //       }
+      //       resourse.video = Resourses.avatarPath + "/" + req.file.filename;
+
+      //       console.log("avatar", resourse.video);
+      //       resourse.save();
+
+      //       return res.status(200).json({
+      //         message: "resourse uploaded successfully",
+      //       });
+      //     }
+        
+      //   }
+
+      // });
+
     }
+    else{
+      return res.status(200).json({
+        message:"you are not authorised to edit the resourse"
+
+      })
+    }
+
   } catch (error) {
     return console.log(error);
   }
- 
+
 };
 
 // List Course

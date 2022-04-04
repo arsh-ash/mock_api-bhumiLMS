@@ -6,7 +6,7 @@ const { createLecture,
        editLecture,
        getAllLecture,
        deleteLecture,
-       lecturesOfSection
+       lecturesOfCourse
 
 }=require("../controller/course/lecture")
 
@@ -30,9 +30,9 @@ router.get("/getAllLecture",
 passport.authenticate("jwt", { session: false }),
 getAllLecture
 )
-router.get("/lecturesOfSection/:sectionId",
+router.get("/allLecturesOfsection/:sectionId",
 passport.authenticate("jwt", { session: false }),
-lecturesOfSection
+lecturesOfCourse
 )
 
 

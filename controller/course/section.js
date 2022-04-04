@@ -112,34 +112,21 @@ exports.getAllSection = async (req, res, next) => {
   }
 };
 
-exports.sectionsOfCourse=async function(req,res){
-   console.log("req params",req.params.courseId);
-  let data= await Course.findById(req.params.courseId)
-  .populate({
-    path:"sections",
-    populate:{
-      path:"lectures",
-      select:"title"
-    },
-    populate:{
-      path:"resourses",
-      select:"title resourseFile"
+module.exports.sectionsOfCourse=async function(req,res){
+  console.log("req.params.courseId",req.params.courseId)
+ let module= await  Course.findById(req.params.courseId).populate("sections");
+ console.log("module",module);
+//   let allsections= await Section.find({
+//    courseId:req.params.courseId
+//  })
+// //  console.log("All sections",allsections);
 
-    }
-
-  })
-  // path:"sections",
-  //     populate:{
-  //       path:"lectures",
-  //       select:"title video"
-  //     }
-  
-  console.log("here are the sections of course",data);
   return res.status(200).json({
-    message:"sections of this courses are fatched",
-    data:data,
+    message:"section fetched successfully",
+    module
   })
-  
+
 
 }
+
 
