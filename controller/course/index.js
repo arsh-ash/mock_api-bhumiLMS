@@ -13,13 +13,14 @@ exports.createCourse = async (req, res, next) => {
       message: "course title is missing",
     });
   }
-  // const courseObject = {
-  //   ...req.body,
-  //   courseCode: req.body.title + "501",
-  // };
+  const courseObject = {
+    ...req.body,
+    courseCode: req.body.title + "501",
+    author:req.user._id,
+  };
   try {
     if (req.user.role == "admin") {
-      const course = await Course.create(req.body);
+      const course = await Course.create(courseObject);
       res.status(200).json({
         success: true,
         message: "Course created successfully",

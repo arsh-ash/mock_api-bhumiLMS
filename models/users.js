@@ -24,6 +24,11 @@ const UserSchema = new mongoose.Schema({
     enum: ["admin", "instructor", "student"],
     default: "student",
   },
+  enrolledCourses:[{
+    type:Schema.Types.ObjectId,
+    ref:"Courses"
+
+  }],
   request:[
     {
       type: Schema.Types.ObjectId,
