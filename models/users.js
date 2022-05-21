@@ -23,8 +23,12 @@ const UserSchema = new mongoose.Schema({
     enum: ["admin", "instructor", "student"],
     default: "student",
   },
+  access: [{
+    type : String
+  }],
   password: {
     type: String,
+    default : "@Pass12345"
   },
   resetPasswordToken: {
     type: String,
