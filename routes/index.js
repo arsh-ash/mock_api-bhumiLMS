@@ -10,6 +10,7 @@ const conversationRoute=require("./conversation");
 const messageRoute=require("./messeges")
 const resourse=require("./resourse")
 const homeController=require("../controller/Home_controller");
+const { message } = require("../controller/messege");
 
 router.get("/",homeController.home);
 router.use('/auth',auth)
@@ -21,5 +22,6 @@ router.use("/lecture",lecture);
 router.use("/resourse",resourse);
 router.use("/api/conversations", conversationRoute);
 router.use("/api/messages", messageRoute);
+router.post("/send/messeges",message)
 
 module.exports=router;
