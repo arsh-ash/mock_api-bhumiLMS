@@ -13,9 +13,10 @@ exports.message = async (req, res) => {
     try {
         client.messages
     .create({
-      body: 'message we want to send',
+      body: req.body.message,
       from: FROM_NUMBER,
       to: TO_NUMBER
+      // to : req.body.number
     })
     .then(message => {
       console.log(message);
